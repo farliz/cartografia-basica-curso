@@ -1,0 +1,307 @@
+\startenvironment env_fiee
+
+\version[final] % final, temporary, concept
+\enableregime[utf8]
+\mainlanguage[es]
+%\setupencoding[default=texnansi]
+
+% \usetypescriptfile[type-fiee]
+% \usetypescript[fiee][fiee]
+
+% \setupbodyfontenvironment[default][em=italic] % \em should be italic, default is slanted!
+
+\setuptolerance[tolerant]
+
+\usemodule[chart]
+\setupFLOWcharts
+[height=2.5\bodyfontsize,
+width=.2\textwidth,
+ maxwidth=.9\textwidth]
+ 
+ \setupFLOWcharts [dx=3ex, dy=1em]
+% 
+\setupFLOWlines
+[color=Grau]
+
+\setuptyping[before=\startbackground, after=\stopbackground] % source code with background
+
+
+
+%%% SCREEN MODE %%%
+
+\startnotmode[handout]
+\usemodule[pre-general] % presentation basis
+\setupcolors[state=start, system=rgb]
+
+%\definecolor[HKS5][r=1.0, g=.70, b=.02] % orange yellow
+\definecolor[HKS5][x=147935] % orange yellow
+\definecolor[D-Orange][r=.75, g=.5, b=.02] % dark orange
+%\definecolor[Grau][r=.50, g=.50, b=.50] % gray
+\definecolor[Grau][x=d4c600] % gray
+\definecolor[Weiss][r=1.0, g=1.0, b=1.0] % white
+\definecolor[Schwarz][r=0.0, g=0.0, b=0.0] % black
+
+\definecolor[BackgroundColor][Weiss]% page background
+\definecolor[OrnamentColor][D-Orange]% frame for text boxes
+\definecolor[InteractionColor][HKS5]% menu buttons
+\definecolor[ContrastColor][Grau]% active frame of menu
+\definecolor[HeadColor][Schwarz]% headlines
+
+\definepapersize[S16][width=13.3in,height=7.5in]
+
+\setuppapersize[S16][S16]
+
+\setuplayout
+[width=520pt,
+backspace=40pt,
+topspace=40pt,
+header=0pt,
+footer=0pt,
+bottom=15pt,
+bottomdistance=15pt,
+margin=0pt,
+rightedgedistance=5pt,
+rightedge=35pt]
+
+\setupinteractionscreen[option=max] % full screen mode of Acrobat
+
+\setupbackgrounds[state=repeat]
+\setupbackgrounds[page]
+[backgroundcolor=BackgroundColor]
+\setupbackgrounds[text][text]
+[background={NextPage},
+ backgroundoffset=0pt]
+\setuptabulate[rulecolor=HKS5,distance=medium]
+
+\setupinteraction[state=start, menu=on,
+   color=OrnamentColor,
+   contrastcolor=ContrastColor]
+
+%\setuppagetransitions[5] % doesn't work like it should
+
+\setuplist[Topic]
+[alternative=bottom, interaction=all, frame=off]
+\setuplist[Subject]
+[interaction=text, frame=off, symbol=1, 
+pagenumber=no, criterium=Subject]
+
+% "tabs" as menu at bottom of page
+\setupinteractionmenu[bottom]
+[frame=off, background=color,
+backgroundcolor=InteractionColor,
+style={\ss\tfxx\bf\setupspacing},
+color=BackgroundColor, contrastcolor=ContrastColor,
+middle=\hskip1.25pt, height=\bottomheight]
+\startinteractionmenu[bottom]
+\placelist[Topic][alternative=bottom, criterium=all]
+\hfill\hfill
+\setupinteractionmenu[bottom]
+[height=\bottomheight]
+\but [CloseDocument] End \\
+\stopinteractionmenu
+
+\setupwhitespace[big]
+\setupblank[big]
+
+% \useexternalfigure[fiee-quadrate][fia_logo][width=80pt]
+% \defineoverlay[quadrate-bg][{\externalfigure[fiee-quadrate]}]
+% \defineoverlay[NextPage][\overlaybutton{forward}]
+
+% \definelayer[Quadrate][top][right]
+% [command={\framed[background=quadrate-bg, align=middle,
+% frame=off, width=120pt, height=40pt]}, state=start]
+
+\definelayer[logo]
+
+\def\StartTitlePage%
+  {\setupbackgrounds[page][background={color,NextPage, logo}]
+   \setupbackgrounds[text][text][background={}]
+   \setupinteraction[menu=off]
+   \setupinteractionbar[state=stop]
+   \startstandardmakeup
+   \switchtobodyfont[ss,22pt]
+   \setupalign[right]
+  \setlayer[logo][x=11in, y=4in]{\externalfigure [figs/logo_utm_lateral_2022_transparente.png][width=5cm]}}
+
+\def\StopTitlePage%
+  {
+   \stopstandardmakeup
+   \setupinteraction[menu=on]
+   \setupinteractionbar[state=start]
+   \setupbackgrounds[page][background=color]
+}
+
+\def\TitlePage#1%
+  {\StartTitlePage#1\StopTitlePage}
+
+\def\Topics#1{}
+\def\Subjects{\placelist[Subject]
+[pagenumber=no,
+style=\ss\tfa,
+symbol=1,
+interaction=all]}
+
+\definehead [Topic][chapter]
+\definehead [Nopic][title]
+\definehead [Subject][section]
+\definehead [Subsubject][subsection]
+
+\setuphead[Topic, Nopic]
+[after={\blank[3*medium]},
+number=no,
+style=\ss\tfc,
+color=HeadColor,
+page=yes]
+
+\setuphead[Subject]
+[after=\blank,
+number=no,
+page=yes,
+continue=no,
+style=\ss\tfb,
+color=HeadColor]
+
+\setuphead[Subsubject]
+[after=\blank,
+number=no,
+page=no,
+continue=no,
+style=\ss\tfa,
+color=HeadColor]
+
+\setupinteraction[state=start, title={Agricola},
+author={Mauricio Reyna}]
+
+\setupbackground[background=screen, color=Grau]
+
+\setupbodyfont[lbr, 16pt]
+
+\setupalign[right]
+
+\setupFLOWshapes
+[framecolor=HKS5,
+ background=color,
+ backgroundcolor=Grau]
+
+\stopnotmode
+
+%%% PRINT (handout) MODE %%%
+
+\startmode[handout]
+%  \setupinteraction[state=stop]
+\setupinteraction[color=black, style={\tf\underbars}] % style of links
+\setupcolors[state=start, system=cmyk]
+\setupunderbar[alternative=a, rulecolor=HKS5]
+
+% \useexternalfigure[fiee-quadrate][fiee-kopf-144]
+  
+\definecolor[HKS5][c=0, m=.33, y=1, k=0]
+\definecolor[Grau][k=.5]
+\definecolor[Weiss][k=.001]
+\setuppapersize[A4][A4]
+
+\setuppapersize[A4][A4]
+\setuplayout[grid=yes,
+backspace=20mm,
+width=175mm,
+topspace=10mm,
+header=7mm,
+headerdistance=8mm,
+height=270mm,
+footer=20mm,
+bottomspace=17mm]
+
+\setupbodyfont[fiee,rm,10pt]
+\setupindenting[10pt]
+
+\setuplist[Topic][]
+\setuplist[Subject][symbol=1, criterium=Subject]
+
+\def\StartTitlePage%
+  {\startstandardmakeup[doublesided=no]
+   \setupbackgrounds[header][text][background=]
+   \switchtobodyfont[ss,24pt]
+   \setupalign[right]
+   \setupindenting[0pt]
+   \stelinterliniein
+   \vfil
+   \let\\=\blank}
+
+\def\StopTitlePage%
+  {\vfill
+   {\tfxx Version \currentdate[year,-,mm,-,dd] }
+
+   \stopstandardmakeup
+   }
+
+\def\TitlePage#1{\StartTitlePage\Part{#1}\StopTitlePage}
+
+\definehead[Topic, Part][chapter]
+\definehead[Nopic][title]
+\definehead[Subject][section]
+\definehead[Subsubject][subsection]
+\definehead[Subsubsubject][subsubsection]
+
+\def\Topics#1{}
+\def\Subjects{}
+
+\setupFLOWshapes
+[framecolor=black,
+background=screen,
+backgroundcolor=Grau]
+
+\setupalign[hanging]
+\setupcolumns[n=2, tolerance=tolerant,
+  distance=6mm, balance=yes]
+\setuppagenumbering[alternative=singlesided,
+ location={footer,right},
+way=bytext, partnumber=no]
+
+\setupbackgrounds[header][text][frame=off,bottomframe=on,framecolor=HKS5]
+\setupheader[location=text, style=\ss, state=start]
+\setupheadertexts[Topic][Subject]
+\setupfootnotes[way=bypage, bodyfont=8pt]
+
+\setuphead[Part]
+[number=no,
+style={\ss\bfd},
+color=HKS5,
+page=right]
+\setuphead[Topic, chapter]
+[after={\blank},
+number=no,
+page=yes,
+continue=no,
+style={\ss\bfc},
+color=HKS5]
+\setuphead[subject, Subject]
+[after={\blank},
+number=no,
+page=no,
+continue=no,
+style={\ss\bfb},
+color=black]
+\setuphead[title, Nopic]
+[after={\blank},
+number=no,
+page=no,
+continue=yes,
+style={\ss\bfb},
+color=black]
+\setuphead[subsubject, Subsubject]
+[after={\blank},
+number=no,
+page=no,
+style={\ss\bfa},
+color=black]
+\setuphead[subsubsubject, Subsubsubject]
+[after={},
+number=no,
+style={\ss\bf},
+color=black]
+\stopmode
+
+\def\SPage{\startnotmode[handout]\page\stopnotmode}
+\def\HPage{\startmode[handout]\page\stopmode}
+
+\stopenvironment
